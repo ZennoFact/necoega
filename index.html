@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猫描 | neco-ega</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+</head>
+<body>
+    <header>
+        <div id="title">猫描<span>-「猫」とは-</span></div>
+        <div><button id="clear">🚮</button></div>
+    </header>
+    <div>
+        <canvas id="canvas"></canvas>
+        <div id="balloon">
+            <p id="catMessage">モデルのロード中ですぞ</p>
+        </div>
+        <div id="catArea">
+            <img id="catHead" src="images/cat_h.png" alt="頭"><img id="catBody" src="images/cat_b.png" alt="お腹"><img id="catTail" src="images/cat_t.png" alt="しっぽ">
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>

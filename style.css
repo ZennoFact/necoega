@@ -1,0 +1,106 @@
+html, body {
+    overflow: hidden;
+}
+
+body {
+    background-color: #efefef;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+}
+
+#catArea {
+    height: 100px;
+}
+
+#catArea img {
+    height: 100px;
+    margin: 0;
+    padding: 0;
+}
+
+#catArea img#catBody {
+    width: 0px;
+    margin: 0;
+    padding: 0;
+}
+
+#catMessage {
+    font-weight: 800;
+    font-size: 16px;
+}
+
+#title {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+#title span {
+    font-size: 14px;
+}
+
+button {
+    padding: 0;
+    font-family: inherit;
+    appearance: none;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+  }
+
+#clear {
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    aspect-ratio: 1;
+    font-size: 28px;
+    color: #222;
+    background-color: #efefef;
+    border-radius: 50%;
+    box-shadow: -4px -4px 8px #fff, 4px 4px 8px rgb(0 0 0 / 24%);
+    transition: box-shadow 0.2s;
+}
+
+#clear:hover {
+    box-shadow: -2px -2px 4px #fff, 2px 2px 4px rgb(0 0 0 / 24%);
+}
+
+
+
+#balloon {
+    position: relative;
+    margin: 5px 0 5px 60px;
+    padding: 15px;
+    background: #C1C1C1;
+    border-radius: 30px;
+}
+  
+#balloon:before {  
+    content: "";
+    position: absolute;
+    left: -38px;
+    width: 13px;
+    height: 12px;
+    bottom: 0;
+    background: #C1C1C1;
+    border-radius: 50%;
+}
+  
+#balloon:after {
+    content: "";
+    position: absolute;
+    left: -24px;
+    width: 20px;
+    height: 18px;
+    bottom: 3px;
+    background: #C1C1C1;
+    border-radius: 50%;
+}
+#balloon p {
+    margin: 0; 
+    padding: 0;
+}
