@@ -1,14 +1,13 @@
-window.addEventListener('touchmove', function(event) {
+window.addEventListener('touchmove', event => {
     event.preventDefault();
-});
-
-const catBody = document.querySelector('#catBody');
-const catMessage = document.querySelector('#catMessage');
-const catHead = document.querySelector('#catHead');
-const catTail = document.querySelector('#catTail');
+}, { passive: false });
 
 const defaultMessage = '猫を描いてくだされ';
 
+const catMessage = document.querySelector('#catMessage');
+const catBody = document.querySelector('#catBody');
+const catHead = document.querySelector('#catHead');
+const catTail = document.querySelector('#catTail');
 const canvas = document.querySelector('#canvas');
 const w = window.innerWidth;
 const h = window.innerHeight;
@@ -30,28 +29,33 @@ ctx.lineWidth = 20;
 ctx.lineCap = "round";
 
 ctx.fillStyle = '#ffffff';
-ctx.fillRect(0, 0, canvas.width, canvas.height); 
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
 
 function init(classifier) {
     canvas.addEventListener('pointerdown', (event) => {
+        event.stopPropagation();
         ctx.beginPath();
         ctx.moveTo(event.offsetX, event.offsetY);
         canvas.addEventListener('pointermove', onMouseMove);
     });
     
-    canvas.addEventListener('pointerup', () => {
+    canvas.addEventListener('pointerup', (event) => {
+        event.stopPropagation();
         canvas.removeEventListener('pointermove', onMouseMove);
 
-        classifier.classify(ctx, gotResults);
+        classifier.classify(canvas, gotResults);
     });
     
-    canvas.addEventListener('pointerout', () => {
+    canvas.addEventListener('pointerout', (event) => {
+        event.stopPropagation();
         canvas.removeEventListener('pointermove', onMouseMove);
 
         classifier.classify(canvas, gotResults);
     });
     
     function onMouseMove(event) {
+        event.stopPropagation();
         ctx.lineTo(event.offsetX, event.offsetY);
         ctx.stroke();
     }
@@ -70,17 +74,20 @@ function gotResults(results, error) {
         return;
     }
 
-    console.log(`name: ${results[0].label}(${results[0].confidence}`);
-    console.log(`name: ${results[1].label}(${results[1].confidence}`);
+    console.log(toString(results[0]));
+    console.log(toString(results[1]));
 
-    if(results[0].label == 'cat'){
-        setCatReaction(results[0]);
-    } else if(results[1].label == 'cat') {
-        setCatReaction(results[1]);
-    } else {
+    results.filter(result => result.label === 'cat');
+    if(results.length == 0) {
         catBody.style.width = '0px';
         catMessage.innerHTML = 'それは，猫ではない。(0%)';
+    } else {
+        setCatReaction(results[0]);
     }
+}
+
+function toString(result) {
+    return `name: ${result.label}(${result.confidence}`;
 }
 
 function setCatReaction(result) {
@@ -92,25 +99,23 @@ function setCatReaction(result) {
         catBody.style.width = (catWidth - 20) + 'px';
     }
 
-    if (result.confidence > 0.8) {
-        catMessage.innerHTML = `猫だあああああああああ！(${parsent * 100}%)`;
-    } else if(result.confidence > 0.6) {
-        catMessage.innerHTML = `猫だ!(${parsent * 100}%)`;
-    } else if(result.confidence > 0.4) {
-        catMessage.innerHTML = `ん？猫かも?(${parsent * 100}%)`;
-    } else if(result.confidence > 0.2)  {
-        catMessage.innerHTML = `猫ちゃうで...(${parsent * 100}%)`;
-    } else {
-        catBody.style.width = '0px';
-        catMessage.innerHTML = 'それは，猫ではない。(0%)';
-    }
+    catMessage.innerHTML = getCatMessage(result.confidence, parsent);
+
 }
+
+function getCatMessage(confidence, parsent) {
+    if(confidence > 0.8) return `猫だあああああああああ！(${parsent * 100}%)`;
+    if(confidence > 0.6) return  `猫だ!(${parsent * 100}%)`;
+    if(confidence > 0.4) return `ん？猫かも?(${parsent * 100}%)`;
+    if(confidence > 0.2) return `猫ちゃうで...(${parsent * 100}%)`;
+    return 'それは，猫ではない。(0%)';
+}
+
 
 const classifier = ml5.imageClassifier('DoodleNet', () => {
     catMessage.innerHTML = `モデルのロードが完了した故，${defaultMessage}`;
-
     init(classifier);
-});
+});    
 
 
 
